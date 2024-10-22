@@ -1,0 +1,559 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+
+//declaration des deux fonctions.
+
+int cool (void) ;
+int cool1 (void) ;
+
+int cool (void) {
+	int i;
+	int k;
+	i = 9;
+	k = 0;
+	srand(time(0));   // pour eviter la repetition.
+	k = rand() % i;         // Renvoie un mot aleatoire .
+	return k;
+}
+
+int cool1 (void) {
+	int i;
+	int k;
+	i = 8;
+	k = 0;
+	srand(time(0));
+	k = rand() % i;
+	return k;
+}
+
+int main ()
+ {
+     //les mots qui vont  etre choisie aleatoirement pour le theme .
+
+char x[9][15] = {
+"countries","family","spring","summer","winter","autumn", "animals","fruits","vegetables"
+};
+
+char c[8][15] = {
+"Brazil","Cameroon","Cyprus","Denmark","Egypt","El Salvador","Greece","Hawaii"
+};
+
+char f[8][15] = {
+"Banana","Mango","Plums","Pear","Strawberries","Tamarind","Tangerine","Watermelon"
+};
+
+char v[8][15] = {
+"broccoli","asparagus","corn","eggplant","cucumber","lettuce","mushrooms","potato"
+};
+
+char s[8][20] = {
+"beach","bikini", "heat","camp","holiday","ocean","picnic","park"
+};
+
+char p[8][15] = {
+"breeze","Easter","green","nest","bloom", "March","bud","butterfly"
+};
+
+char w[8][15] = {
+"coat","cold","cough","blanket","firewood","fog","frozen","ice"
+};
+
+char a[8][15] = {
+"amber","leaves","pie","Halloween","spooky","Thanksgiving","feast","harvest"
+};
+
+char b[8][15] = {
+"Kitten","Mouse","Hamster","Seagull","cow","peacock","Hippopotamus","panda"
+};
+
+char l[8][15] = {
+"ancestor","aunt","childhood","descendant","divorce","heir","history","nephew"
+};
+
+ //les listes des mots correspondant à chaque theme .
+
+char fruits[][30] = {
+ "apple","apricots","avocado","banana","blackberries","blackcurrant","blueberries","breadfruit","cantaloup","carambola","cherimoya","cherries","clementine","coconut meat","cranberries","date fruit","durian","elderberries","feijoa","figs","gooseberries","grapefruit","grapes","guava","honeydew ","melon","jackfruit","java-plum","jujube fruit","kiwi","kumquat","lemon","lime","longan","loquat","lychee","mandarin","mango","mangosteen","mulberries","nectarine","olives","orange","papaya","passion Fruit","peaches","pear","persimmon","dragonfruit","pineapple","pitanga","plantain","plums","pomegranate","prickly pear","prunes","pummelo","quince","raspberries","sapodilla","sapote"," mamey","strawberries","tamarind","tangerine","watermelon"
+ };
+
+char vegetables[][30] ={
+"carrot","broccoli","asparagus","cauliflower","corn","cucumber","eggplant","greenpepper","lettuce","mushrooms","onion","potato","pumpkin","redpepper","tomato","beetroot","brusselsprouts","peas","zucchini","radish","sweetpotato","artichoke","leek","cabbage","celery","chili","garlic","basil","coriander","parsley","dill","rosemary","oregano","cinnamon","saffron","green bean","bean","chickpea","lentil"
+ };
+
+char countries[][30]={
+ "afghanistan","albania","algeria","andorra","angola","antigua and barbuda","argentina","armenia","australia","austria","austrian Empire","azerbaijan","baden","bahamas", "bahrain","bangladesh","barbados","bavaria","belarus","belgium","belize","benin","dahomey","bolivia","Bosnia and Herzegovina","botswana","brazil","brunei","Brunswick and Lüneburg","bulgaria","Burkina Faso","Upper Volta","burma","burundi","cabo Verde","cambodia","cameroon","canada","Central African Republic","chad","chile","china","colombia","comoros","costa Rica","cote d’Ivoire","ivory Coast","croatia","cuba","cyprus","czechia","czechoslovakia","denmark","djibouti","dominica","Dominican Republic","ecuador","egypt","el Salvador","Equatorial Guinea","eritrea","estonia","eswatini","ethiopia","fiji","finland","france","gabon","georgia","germany","ghana","Grand Duchy of Tuscany","greece","grenada","guatemala","guinea","Guinea-Bissau","guyana","haiti","hanover","Hanseatic Republics","hawaii","hesse","Holy See","honduras","hungary","iceland","india","indonesia","iran","iraq","ireland","israel","italy","jamaica","japan","jordan","kazakhstan","kenya","kiribati","korea","kosovo","kuwait","kyrgyzstan","laos","latvia","lebanon","lesotho","liberia","libya","liechtenstein","lithuania","luxembourg","malysia","mali","mexico","mongolia","morocco","mozambique","nepal","nigeria","new zealand","niger","norway","oman","portugal","pakistan","peru","philippines","poland","portugal","qatar","russia","romania","spain","syria","sweden","texas","tunisia","turkey","thailand","ukraine","uruguay","vietnam","yemen","zambia","zimbabwe"
+ };
+
+char summer[][30] ={
+ "air conditioner","august","backpacking","baseball","bathing","beach","berries","bikini","boating","camp","camping","canoeing","daisy","diving","ease","fan","flowers","frisbee","gardening","grass","heat","hiking","holiday","hot","humidity","icecream","journey","july","june","lightning","muggy","ocean","outdoors","outings","outside","park","picnic","play","popsicle","recreation","relax","rest","trip","rose","sailing","sandals","sandcastle","sea","heat","seashoree","season","shorts","showers","sightseeing","stifling","summer","sun","sundress","sunflower","sunhat","sunny","sunscreen","sweltering","swim","fins","swimsuit","tan","thunder","thunderstorm","travel","trunks","vacation","visit","voyage","warm","weather","watermelon","waterpark","waterski","zoris"
+ };
+
+char spring[][30] ={
+ "april","baby animals","baseball","birth","bloom","blossom","born","breeze","bud","bulbs","bunny","butterfly","chick","crocus","daffodil","easter","eggs","flowers","foal","galoshes","grass","green","grow","hatch","hyacinth","june","kid","baby goat","lamblife cycle","march","may","melt","narcissus","nest","pasque flower","polliwog","puddles","rabbit","rain","rainbow","raincoat","rebirth","robin","season","showers","slicker","snowdrop","spring","spring break","spring cleaning","sprout","sunshine","tadpole","thaw","tulip","umbrella","vernal equinox","warming","weather","windy","worm"
+ };
+
+char winter[][30]={
+ "anorak","arctic","balaclava","below zero","beret","biting","bitter cold","black ice","blanket","bleak","thunder","turbulance","typhoon","blizzard","blustery","boots","brisk","cap","chill","chills","chilly","chimney","coat","cocoon","cold","comforter","cough","curling","december","dogsled","drafty","dreary","duvet","earmuffs","eggnog","evergreen","february","fire","fireplace","firewood","flannel","fleece","flu","flurries","fog","freezing","frigid","frostbite","frostbitten","frosty","frozen","fruitcake","furnace","gale","gingerbread","glacial","glacier","gloves","gust","hailstone","harsh","heat","heater","hibernate","hockey","hoodie","hotchocolate","hypothermia","ice","cap","crystal","fishing","hockey","iceberg","icicle","icy","insulation","jackFrost","jacket","january","lakeeffect","log","longjohns","luge","melt","mittens","muffler","nippy","overcast","overcoat","overshoes","parka","pinecone","polar","pullover","quilt","radiator","raw","reindeer","scarf","shiver","skate","ski","sled","sledge","sleet","slippery","slush","sneeze","sniffle","snow","shovel","snowball","snowboard","snowbound","snowfall","snowflake","snowman","snowplow","snowstorm","snowy","socks","solstice","storm","stove","sugarplum","sweater","thaw","thermometer","toboggan","turtleneck","whiteout","wind","windy","winter","wintertime","wintry","wood","wool","woolens","zero degrees"
+ };
+
+char autumn[][30]={
+ "abundant","amber","autumn","autumnal","equinox","breezy","bright","brilliant","brisk","changing","chilly","colder","cozy","crackling","crisp","crunchy","earthy","fall","foggy","frosty","golden","harvest","hibernate","leaf","leaves","maple","september","october","november","march","april","may","orange","rainy","rake","raked","red","rustlin","scarf","season","sweater","windy","brisk","cobweb","cool","costume","columbus","gourd","halloween","hayride","mask","pumpkin","spice","spooky","feast","thankful","Thanksgiving","turkey","welcoming","bounty","brown","red","russet","rustling","scarlet","scenic","seasonal","temperate","yellow","migrate","picking","burn","change"
+ };
+char animals[][30]={
+ "turtle","leopard","tiger","tropical fish","hamster","rabbit","shrimp","pig","crab","bee","sheep","horse","crow","peacock","dove","goose","stork","pigeon","turkey","hawk","bald eagle","raven","parrot","flamingo","swallow","black bird","robin","swan","squirrel","panda","walrus","mouse","kangaroo","goat","monkey","cow","giraffe","woodpecker","camel","koala","alligator","bear","blue whale","coyote","chimpanzee","raccoon","donkey","lion","arctic","wolf","crocodile","elephant","squirrel","snake","kangaroo","hippopotamus","elk","fox","gorilla","bat","hare","toad","frog","deer","rat","badger","lizard","mole","hedgehog","otter","reindeer","fish","seal","octopus","shark","seahorse","starfish","whale","penguin","jellyfish","squid","lobster","pelican","clams","dolphin","shells","sea urchin","cormorant","pelican","sea anemone","sea turtle","sea lion","coral","moth","bee","butterfly","spider","ladybird","ladybug","ant","dragonfly","fly","mosquito","grasshopper","beetle","cockroach","centipede","worm","louse","tom ","queen ","kitten","dog ","bitch ","puppy","rooster ","hen ","chick","drake ","duck ","duckling","bull", "cow ","calf","deer"," doe ","fawn","stallion","mare ","cat","foal","ram ", "ewe ","lamb","tigeress", "tiger cub" ,"lioness","lion cub"
+ };
+
+   char family[][30]={
+"adoption","adoptive father","adoptive mother","ancestor","aunt","bachelor","birth mother","blood relative","bride","bridegroom","brother","brotherinlaw","brotherhood","brotherly","caregiver","child","childhood","children","clan","closeknit","connection","cousin","dad","daddy","daughter","daughterinlaw","descendant","devoted","divorce","eligible","engaged","engagement","estranged","ex","ex husband","ex wife","extended family","faithful","family","family tree","father","fatherinlaw","fiancee","first born","first cousin","first","flesh and blood","folksfoster","foster child","foster father","foster mother","foster parent","fraternal","fraternal twin","friend","genealogy","grampa","gramps","grandchild","grandchildren","granddaughter","grandfather","grandma","grandmother","grandpa","grandparent","grandson","granny","greataunt","greatgranddaughter","greatgrandfather","greatgrandmother","greatgrandparent","greatgrandson","greatuncle","groom","grownup","halfbrother","halfsister","heir","heiress","helpmate","hereditary","heritage","history","home","household","husband","identical","twininlaw","infancy","infant","inherit","inheritance","juvenile","kin","kindred","kinfolk","kinship","kith","lineage","love","loyalty","ma","maiden name","mama","marriage","mate","maternal","matriarch","matrimony","minor","Miss","mom","mommy","monogamy","mother","motherinlaw","Mr","Mrs","Ms","nana","natal","nephew","nest","newlywed","niece","nuclear family","nuptial","nurture","offspring","orphan","pa","papa","parent","partner","paternal","patriarch","pop","posterity","progenitor","progeny","quadruplets","quadsquints","quintuplets","related","relations","relative","second","cousin","senior","separation","sibling","single","sister","sisterinlaw","sisterhood","sisterly","son","soninlaw","spouse","stepbrother","stepchild","stepchildren","stepdad","stepdaughter","stepfather","stepmom","stepmother","stepsister","stepson","support","surrogate ","mother","tribe","triplets","trust","trustworthy","twin ","brothertwin ","sistertwins","uncle","value","wed","wedding","wedlock","wife","youngster","youth"
+ };
+
+int i,j;
+char ch[30];
+int ran,ran1,len1,len2,len3,len4,len5,len6,len7,len8,len9,str,str1,str2,str3,str4,str5,str6,str7,str8;
+
+ //verification de la longeur d'un tableau de chaines .
+
+len1 = sizeof(countries)/sizeof(countries[0]);
+len2 = sizeof(fruits)/sizeof(fruits[0]);
+len3= sizeof(vegetables)/sizeof(vegetables[0]);
+len4 = sizeof(summer)/sizeof(summer[0]);
+len5= sizeof(spring)/sizeof(spring[0]);
+len6 = sizeof(winter)/sizeof(winter[0]);
+len7 = sizeof(autumn)/sizeof(autumn[0]);
+len8 = sizeof(animals)/sizeof(animals[0]);
+len9 = sizeof(family)/sizeof(family[0]);
+
+  //le calcule de la longeur du mot aleatoire.
+ran1=cool1();
+str=strlen(c[ran1]);
+str1=strlen(f[ran1]);
+str2=strlen(v[ran1]);
+str3=strlen(s[ran1]);
+str4=strlen(p[ran1]);
+str5=strlen(w[ran1]);
+str6=strlen(a[ran1]);
+str7=strlen(b[ran1]);
+str8=strlen(l[ran1]);
+
+ran=cool();
+
+ printf("      WELCOME TO RANDOMIZE GAME MADE BY DOUA \n ");
+ printf("               LET THE GAME START \n ");
+ printf("      you have 3 chances to find the correct word that starts with the last letter of the given word  \n\n ");
+ printf("              The theme is : %s\n", x[ran]);
+
+    //comparaison de l'egalite de deux mots et affichage du mot aleatoire correspondant au theme .
+
+  if (strcmp(x[ran],"countries")==0)
+  {
+      printf("                      %s\n",c[ran1]);
+  }
+ else if (strcmp(x[ran],"fruits")==0)
+    {
+        printf("                   %s\n", f[ran1]);
+ }
+  else if (strcmp(x[ran],"vegetables")==0)
+    {
+        printf("                   %s\n", v[ran1]);
+ }
+  else if (strcmp(x[ran],"summer")==0)
+    {
+        printf("                   %s\n", s[ran1]);
+ }
+  else if (strcmp(x[ran],"spring")==0)
+    {
+        printf("                   %s\n", p[ran1]);
+ }
+  else if (strcmp(x[ran],"winter")==0)
+    {
+        printf("                   %s\n", w[ran1]);
+ }
+  else if (strcmp(x[ran],"autumn")==0)
+    {
+        printf("                   %s\n", a[ran1]);
+ }
+  else if (strcmp(x[ran],"animals")==0)
+    {
+        printf("                   %s\n", b[ran1]);
+ }
+   else if (strcmp(x[ran],"family")==0)
+    {
+        printf("                   %s\n", l[ran1]);
+ }
+     //saisie du mot entrer .
+    do
+        {
+    printf("               Enter ur word : \n");
+    scanf("%s",&ch);
+    }while (strlen(ch)<3);
+
+
+if (strcmp(x[ran],"countries")==0)
+ {
+     for (j=1;j<3;j++)               // 3 essais donnés pour la saisie d'un mot correct.
+ {
+      for(i = 0; i < len1;i++)
+{
+    if(strcmpi(countries[i], ch)==0)      //la recherche du presence du mot donner dans l'intervalle des mots.
+        {
+	break;
+		}
+	}
+	if ((i != len1) && (ch[0] ==c[ran1][str-1]) )   //la comparaison du dernier caractere du mot afficher et le 1er caractere du mot saisie.
+	 {
+		printf("         GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("        Sorry you have to try again  \a\n ");
+		do {
+		printf ("               your word is : ");
+		 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+
+	}
+ }
+	 //verification du dernier mot entrer .
+
+      for(i = 0; i < len9; i++)
+         {
+    if(strcmpi(countries[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len1) && (ch[0]!=c[ran1][str-1]))
+        {
+		printf("        YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n");
+	}
+	else {printf ("  YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+    //repetition du meme instructions pour les autres themes .
+ else if (strcmp(x[ran],"fruits")==0)
+  {
+      for (j=1;j<3;j++)
+   {
+    for(i = 0; i < len2;i++)
+   {
+    if(strcmpi(fruits[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len2) && (ch[0]==f[ran1][str1-1]))
+	 {
+		printf("         GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("        Sorry you have to try again  \a\n ");
+    do{
+		printf ("             your word is : ");
+	 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+	      for(i = 0; i < len2; i++)
+         {
+    if(strcmpi(fruits[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len2) && (ch[0]!=f[ran1][str1-1]))
+        {
+		printf("         YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n ");
+	}
+	else {printf ("   YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+ else if (strcmp(x[ran],"vegetables")==0)
+   {
+       for (j=1;j<3;j++)
+    {
+    for(i = 0; i < len3; i++)
+     {
+    if(strcmpi(vegetables[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len3) && (ch[0]==v[ran1][str2-1]))
+        {
+		printf("       GONGRATS !!! YOU WON !!!!!! \n " );
+		break;
+     	}
+	else {
+		printf("      Sorry you have to try again  \a\n ");
+    do{
+		printf ("            your word is : ");
+		 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+       for(i = 0; i < len3; i++)
+         {
+    if(strcmpi(vegetables[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len3) && (ch[0]!=v[ran1][str2-1]))
+        {
+		printf("           YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n ");
+	}
+	else {printf ("    YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+ else if (strcmp(x[ran],"summer")==0)
+    {
+        for (j=1;j<3;j++)
+    {
+        for(i = 0; i < len4; i++)
+      {
+    if(strcmpi(summer[i], ch)==0)
+        {
+	break;
+		}
+	 }
+	if ((i != len4) && (ch[0]==s[ran1][str3-1]))
+        {
+		printf("          GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("         Sorry you have to try again  \a\n ");
+    do{
+		printf ("              your word is : ");
+		 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+  for(i = 0; i < len4; i++)
+         {
+    if(strcmpi(summer[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len4) && (ch[0]!=s[ran1][str3-1]))
+        {
+		printf("        YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n ");
+	}
+	else {printf ("   YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+  else if (strcmp(x[ran],"spring")==0)
+    {
+        for (j=1;j<3;j++)
+    {
+	    for(i = 0; i < len5; i++)
+        {
+    if(strcmpi(spring[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len5) && (ch[0]==p[ran1][str4-1]))
+	 {
+		printf("         GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("         Sorry you have to try again  \a\n ");
+	do{
+		printf ("             your word is : ");
+		 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+	 for(i = 0; i < len5; i++)
+         {
+    if(strcmpi(spring[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len5) && (ch[0]!=p[ran1][str4-1]))
+        {
+		printf("        YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n");
+	}
+	else {printf ("     YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+  else if (strcmp(x[ran],"winter")==0)
+     {
+         for (j=1;j<3;j++)
+     {
+         for(i = 0; i < len6; i++)
+        {
+    if(strcmpi(winter[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len6) && (ch[0]==w[ran1][str5-1]))
+        {
+		printf("       GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("      Sorry you have to try again  \a\n ");
+	do{
+	printf ("            your word is : ");
+	 scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+	  for(i = 0; i < len6; i++)
+         {
+    if(strcmpi(winter[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len6) && (ch[0]!=w[ran1][str5-1]))
+        {
+		printf("          YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n");
+	}
+	else {printf ("    YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+ else if (strcmp(x[ran],"autumn")==0)
+	{
+	    for (j=1;j<3;j++)
+	{
+	    for(i = 0; i < len7; i++)
+        {
+    if(strcmpi(autumn[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len7) && (ch[0]==a[ran1][str6-1]))
+	 {
+		printf("        GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("       Sorry you have to try again  \a\n ");
+	do{
+		printf ("            your word is : ");
+	scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+	   for(i = 0; i < len7; i++)
+         {
+    if(strcmpi(autumn[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len7) && (ch[0]!=a[ran1][str6-1]))
+        {
+		printf("         YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n");
+	}
+	else {printf ("    YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ?? \n\n");
+	}
+	}
+
+ else if (strcmp(x[ran],"animals")==0)
+	{
+	    for (j=1;j<3;j++)
+     {
+	    for(i = 0; i < len8; i++)
+        {
+    if(strcmpi(animals[i], ch)==0)
+        {
+	break;
+		}
+	}
+	if ((i != len8) && (ch[0]==b[ran1][str7-1]))
+        {
+		printf("         GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("       Sorry you have to try again  \a\n ");
+	do{
+        printf ("              your word is : ");
+		scanf("%s",&ch);
+        }while (strlen(ch)<3);
+	}}
+  for(i = 0; i < len8; i++)
+         {
+    if(strcmpi(animals[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len8) && (ch[0]!=b[ran1][str7-1]))
+        {
+		printf("        YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n");
+	}
+	else {printf ("    YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ??\n\n");
+	}
+	}
+
+ else  if (strcmp(x[ran],"family")==0)
+	{
+	    for (j=1;j<3;j++)
+	 {
+      for(i = 0; i < len9; i++)
+         {
+    if(strcmpi(family[i], ch)==0)
+        {
+	break;
+		}
+         }
+	if ((i != len9) && (ch[0]==l[ran1][str8-1]))
+        {
+		printf("         GONGRATS !!! YOU WON !!!!!! \n ");
+		break;
+	}
+	else {
+		printf("        Sorry you have to try again  \a\n ");
+	do{
+		printf ("               your word is : ");
+		scanf("%s",&ch);
+    }while (strlen(ch)<3);
+	}}
+    for(i = 0; i < len9; i++)
+         {
+    if(strcmpi(family[i], ch)==1)
+        {
+	break;
+		}
+         }
+	if ((i != len9) && (ch[0]!=l[ran1][str8-1]))
+        {
+		printf("         YOU FAILED THIS TIME BUT YOU CAN ALWAYS TRY AGAIN \n\n ");
+	}
+	else {printf ("    YOU DID A GOOD JOB !! WHY DONT YOU TRY ONCE AGAIN ?? \n\n");
+	}
+	}
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

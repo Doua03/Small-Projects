@@ -1,0 +1,564 @@
+#include <GL/glut.h>
+#include <cmath>
+#include <iostream>
+#include <string>
+
+float rabbitX = 0.0;
+float rabbitY = 0.0;
+float rabbitZ = 0.7;
+
+float obstacleX = 1.2;
+float obstacleY = -0.8;
+float obstacleZ = 0.7;
+float obstacle1X = 0.3;
+float obstacle1Y = -1.4;
+float obstacle1Z = 0.7;
+float obstacle2X = -2;
+float obstacle2Y = -2;
+float obstacle2Z = 0.7;
+
+bool happy = true;
+bool bouncing = false;
+bool gameOver = false;
+float rabbitColor[3] = {0.8, 0.8, 0.8}; // Initial color: light gray
+// Camera parameters
+float cameraX = 0.0;
+float cameraY = 0.0;
+float cameraZ = 3.0;
+float lookAtX = 0.0;
+float lookAtY = 0.0;
+float lookAtZ = 0.0;
+
+enum GameState {
+    PLAYING,
+    GAME_OVER,
+    YOU_WON
+};
+
+GameState gameState = PLAYING;
+// Declare resetGame function at the top
+void resetGame();
+void updateCamera() {
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(cameraX, cameraY, cameraZ, lookAtX, lookAtY, lookAtZ, 0, 1, 0);
+}
+
+bool checkCollision(float x1, float y1, float z1, float radius1, float x2, float y2, float z2, float radius2) {
+    float distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2) + pow(z2 - z1, 2));
+    return distance < (radius1 + radius2);
+}
+
+
+void drawRabbit(float x, float y, float z){
+
+
+    // head
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glColor3fv(rabbitColor);
+    glutSolidSphere(0.1, 16, 16);
+    glPopMatrix();
+    //second head
+    glPushMatrix();
+    glTranslated(x,y-0.05,z);
+    glScaled(1.1,1,1);
+      glColor3fv(rabbitColor);
+    glutSolidSphere(0.1,16,16);
+    glPopMatrix();
+   //body
+    glPushMatrix();
+    glTranslated(x,y-0.35,z);
+    glScaled(0.75,2.1,1);
+     glColor3fv(rabbitColor);
+    glutSolidSphere(0.12,16,16);
+    glPopMatrix();
+
+    //right leg
+    glPushMatrix();
+    glTranslated(x-0.04,y-0.6,z+0.05);
+    glScaled(0.3,2,1);
+    glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+    //left leg
+    glPushMatrix();
+    glTranslated(x+0.04,y-0.6,z+0.05);
+    glScaled(0.3,2,1);
+      glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+    //right ear
+    glPushMatrix();
+    glTranslated(x-0.04,y+0.2,z+0.05);
+    glScaled(0.4,1.8,1);
+      glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+     //right ear pink
+    glPushMatrix();
+    glTranslated(x-0.04,y+0.2,z+0.07);
+    glScaled(0.4,1.65,1);
+    glColor3d(1.0, 0.7, 0.7);
+    glutSolidSphere(0.08,16,16);
+    glPopMatrix();
+    //left ear
+    glPushMatrix();
+    glTranslated(x+0.04,y+0.2,z+0.05);
+    glScaled(0.4,1.8,1);
+      glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+     //left ear pink
+    glPushMatrix();
+    glTranslated(x+0.04,y+0.2,z+0.07);
+    glScaled(0.4,1.65,1);
+    glColor3d(1.0, 0.7, 0.7);
+    glutSolidSphere(0.08,16,16);
+    glPopMatrix();
+   //right arm
+    glPushMatrix();
+    glTranslated(x-0.095,y-0.25,z+0.01);
+    glRotated(-30,0,0,1);
+    glScaled(0.4,1.4,1);
+    glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+    //left arm
+   glPushMatrix();
+    glTranslated(x+0.095,y-0.25,z+0.01);
+    glRotated(30,0,0,1);
+    glScaled(0.4,1.4,1);
+      glColor3fv(rabbitColor);
+    glutSolidSphere(0.09,16,16);
+    glPopMatrix();
+     //right eye
+    glPushMatrix();
+    glTranslated(x-0.025,y+0.01,z+0.09);
+    glColor3d(0,0,0);
+    glutSolidSphere(0.02,16,16);
+    glPopMatrix();
+     //left eye
+    glPushMatrix();
+    glTranslated(x+0.025,y+0.01,z+0.09);
+    glColor3d(0,0,0);
+    glutSolidSphere(0.02,16,16);
+    glPopMatrix();
+      //nose
+    glBegin(GL_TRIANGLES);
+    glColor3d(1.0, 0.7, 0.7);
+    glVertex3f(x-0.02,y-0.02,z+0.1);
+    glVertex3f(x+0.02,y-0.02,z+0.1);
+    glVertex3f(x,y-0.04,z+0.1);
+    glEnd();
+    // mouth
+    glPushMatrix();
+    glTranslated(x, y - 0.06, z + 0.1);
+    glRotated(180, 0, 0, 1);
+    if (happy) {
+        glColor3d(0, 0, 0);  // Set color to black for smiling
+        glBegin(GL_LINE_STRIP);
+        for (int i = 0; i <= 180; i++) {
+            double angle = i * 3.14159 / 180.0;
+            double x = 0.02 * cos(angle);
+            double y = 0.018 * sin(angle);
+            glVertex2d(x, y);
+        }
+        glEnd();
+    } else {
+        glColor3d(0, 0, 0);  // Set color to black for frowning
+        glBegin(GL_LINE_STRIP);
+        for (int i = 180; i <= 360; i++) {
+            double angle = i * 3.14159 / 180.0;
+            double x = -0.02 * cos(angle);
+            double y = 0.018 * sin(angle);
+            glVertex2d(x, y);
+        }
+        glEnd();
+    }
+    glPopMatrix();
+
+
+}
+void changeRabbitColor(float r, float g, float b) {
+    rabbitColor[0] = r;
+    rabbitColor[1] = g;
+    rabbitColor[2] = b;
+}
+void Draw3DCube(float x, float y, float z, float a, float b, float c,float r , float g, float q) {
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glScalef(a, b, c);
+    glColor3d(r, g, q);  // Green color
+    glutSolidCube(1);
+    glPopMatrix();
+}
+void Draw3DSphere(float x, float y, float z, float radius,float r,float g,float q) {
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glColor3d(r,g,q);
+    glutSolidSphere(radius, 10, 10);
+    glPopMatrix();
+}
+
+void nuage(float x, float y, float z, float w ){
+    Draw3DSphere(x,y,z,w,1,1,1);
+    Draw3DSphere(x+0.2,y,z,w,1,1,1);
+    Draw3DSphere(x+0.4,y-0.1,z,w,1,1,1);
+    Draw3DSphere(x-0.2,y-0.1,z,w,1,1,1);
+    Draw3DSphere(x+0.2,y-0.2,z,w,1,1,1);
+    Draw3DSphere(x,y-0.2,z,w,1,1,1);
+}
+
+void tree (float x , float y , float z){
+
+Draw3DCube(x,y,z,0.2,0.8,0.1,0.7,0.4,0.02);
+
+glPushMatrix();
+glTranslated(x,y+0.7,0.43);
+glScaled(1.25,2,1);
+glColor3d(0,0.7,0);
+glutSolidSphere(0.2,16,16);
+glPopMatrix();
+
+glBegin(GL_TRIANGLES);
+glColor3f(0,0.7,0);
+glVertex3f(x-0.17,y+1,z+0.18);
+glVertex3f(x+0.17,y+1,z+0.18);
+glVertex3f(x,y+1.2,z+0.18);
+glEnd();
+}
+
+void track(){
+    //left cube
+    glPushMatrix();
+    glTranslated(-2,-2.2,0.15);
+    glScaled(2.7,1.3,1);
+    glColor3d(1.0, 0.5, 0.0);
+    glutSolidCube(0.8);
+    glPopMatrix();
+    //left sphere
+    glPushMatrix();
+    glTranslated(-1,-2.2,0.15);
+    glScaled(2.2,1.5,1);
+    glColor3d(1.0, 0.5, 0.0);
+    glutSolidSphere(0.5,16,16);
+    glPopMatrix();
+    //middle cube
+    glPushMatrix();
+    glTranslated(0,-1.5,0.15);
+    glRotated(-45,0,0,1);
+    glScaled(1.1,2.8,1);
+    glColor3d(1.0, 0.5, 0.0);
+    glutSolidCube(0.8);
+    glPopMatrix();
+    //right sphere
+    glPushMatrix();
+    glTranslated(1,-0.8,0.15);
+    glScaled(2.2,1.5,1);
+    glColor3d(1.0, 0.5, 0.0);
+    glutSolidSphere(0.5,16,16);
+    glPopMatrix();
+    //right cube
+    glPushMatrix();
+    glTranslated(2,-0.8,0.15);
+    glScaled(2.7,1.3,1);
+    glColor3d(1.0, 0.5, 0.0);
+    glutSolidCube(0.8);
+    glPopMatrix();
+
+}
+
+void finishLineCube(float x , float y, float z,float a ,float b, float c){
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glScaled(1,1,0.01);
+    glColor3d(a,b,c);
+    glutSolidCube(0.1);
+    glPopMatrix();
+}
+void finishLine(){
+finishLineCube(-2.7,-2,0.6,0,0,0);
+finishLineCube(-2.7,-1.9,0.6,1,1,1);
+finishLineCube(-2.7,-1.8,0.6,0,0,0);
+finishLineCube(-2.7,-1.7,0.6,1,1,1);
+finishLineCube(-2.7,-2.1,0.6,1,1,1);
+finishLineCube(-2.7,-2.2,0.6,0,0,0);
+finishLineCube(-2.7,-2.3,0.6,1,1,1);
+finishLineCube(-2.7,-2.4,0.6,0,0,0);
+finishLineCube(-2.7,-2.5,0.6,1,1,1);
+finishLineCube(-2.7,-2.6,0.6,0,0,0);
+finishLineCube(-2.7,-2.7,0.6,1,1,1);
+finishLineCube(-2.6,-2,0.6,1,1,1);
+finishLineCube(-2.6,-1.9,0.6,0,0,0);
+finishLineCube(-2.6,-1.8,0.6,1,1,1);
+finishLineCube(-2.6,-1.7,0.6,0,0,0);
+finishLineCube(-2.6,-2.1,0.6,0,0,0);
+finishLineCube(-2.6,-2.2,0.6,1,1,1);
+finishLineCube(-2.6,-2.3,0.6,0,0,0);
+finishLineCube(-2.6,-2.4,0.6,1,1,1);
+finishLineCube(-2.6,-2.5,0.6,0,0,0);
+finishLineCube(-2.6,-2.6,0.6,1,1,1);
+finishLineCube(-2.6,-2.7,0.6,0,0,0);
+finishLineCube(-2.8,-2,0.6,1,1,1);
+finishLineCube(-2.8,-1.9,0.6,0,0,0);
+finishLineCube(-2.8,-1.8,0.6,1,1,1);
+finishLineCube(-2.8,-1.7,0.6,0,0,0);
+finishLineCube(-2.8,-2.1,0.6,0,0,0);
+finishLineCube(-2.8,-2.2,0.6,1,1,1);
+finishLineCube(-2.8,-2.3,0.6,0,0,0);
+finishLineCube(-2.8,-2.4,0.6,1,1,1);
+finishLineCube(-2.8,-2.5,0.6,0,0,0);
+finishLineCube(-2.8,-2.6,0.6,1,1,1);
+finishLineCube(-2.8,-2.7,0.6,0,0,0);
+}
+
+void startLine(){
+glPushMatrix();
+glTranslated(2.6,-0.8,0.6);
+glScaled(0.04,2.5,0.01);
+glColor3d(1,1,1);
+glutSolidCube(0.5);
+glPopMatrix();}
+
+void obstacle(float x , float y, float z){
+
+    glPushMatrix();
+    glTranslated(x,y,z);
+    glScaled(1.2,1.4,0.8);
+    glColor3d(0.7,0.5,0.2);
+    glutSolidCube(0.2);
+    glPopMatrix();
+
+}
+
+void envi (){
+
+     Draw3DCube(0,-1.4,0,6,3.2,1,0,0.5,0);
+     track();
+    finishLine();
+    startLine();
+
+}
+void drawText3D(float x, float y, float z, const char* text, float r, float g, float b) {
+    glPushMatrix();
+    glColor3f(r, g, b);
+    glRasterPos3f(x, y, z);
+
+    for (int i = 0; text[i] != '\0'; i++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
+    }
+
+    glPopMatrix();
+}
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    updateCamera();
+
+    glEnable(GL_DEPTH_TEST);
+
+    if (gameState == PLAYING) {
+        nuage(0.6,1.6,0,0.15);
+    nuage(1.8,2.5,0,0.15);
+    nuage(-1.2,2.3,0,0.15);
+    nuage(-2.3,1.2,0,0.15);
+
+    tree(0,0.6,0.02);
+    tree(1.5,0.6,0.02);
+    tree(-1.5,0.6,0.02);
+    envi();
+    obstacle(obstacleX,obstacleY,obstacleZ);
+     obstacle(obstacle1X,obstacle1Y,obstacle1Z);
+      obstacle(obstacle2X,obstacle2Y,obstacle2Z);
+    // Move the rabbit based on arrow key input
+    drawRabbit(rabbitX, rabbitY, rabbitZ);
+   // Check for collision with obstacles
+        if (checkCollision(rabbitX, rabbitY, rabbitZ, 0.08, obstacleX, obstacleY, obstacleZ, 0.1) ||
+            checkCollision(rabbitX, rabbitY, rabbitZ, 0.08, obstacle1X, obstacle1Y, obstacle1Z, 0.1) ||
+            checkCollision(rabbitX, rabbitY, rabbitZ, 0.08, obstacle2X, obstacle2Y, obstacle2Z, 0.1)) {
+            gameState = GAME_OVER;
+        }
+
+        // Check for collision with finish line
+        if (rabbitX < -2.6 && rabbitY > -2.7 && rabbitY < -1.7) {
+            gameState = YOU_WON;
+        }
+    } else if (gameState == GAME_OVER) {
+        // Display the game-over message
+        glColor3f(0, 0, 0);  // Set color to red
+        glRasterPos2f(-0.5, 0);
+        std::string gameOverText = "Game Over! Click to restart.";
+        for (size_t i = 0; i < gameOverText.length(); ++i) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, gameOverText[i]);
+        }
+
+        // Start a timer to control how long the game-over message is displayed
+        glutTimerFunc(2000, [](int value) {
+            // Reset the game and hide the game-over message after 2 seconds
+            resetGame();
+            gameState = PLAYING;
+            glutPostRedisplay();
+        }, 0);
+    } else if (gameState == YOU_WON) {
+        // Draw a scene for winning
+        glColor3f(0, 0, 0);  // Set color to green
+        glRasterPos2f(-0.5, 0);
+        std::string youWonText = "Congratulations! You won! Click to restart.";
+        for (size_t i = 0; i < youWonText.length(); ++i) {
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, youWonText[i]);
+        }
+
+        // Start a timer to control how long the "you won" message is displayed
+        glutTimerFunc(5000, [](int value) {
+            // Reset the game and hide the "you won" message after 5 seconds
+            resetGame();
+            gameState = PLAYING;
+            glutPostRedisplay();
+        }, 0);
+    }
+
+    glDisable(GL_DEPTH_TEST);
+
+    glFlush();
+    glutSwapBuffers();
+}
+
+// ...
+
+void resetGame() {
+    // Reset rabbit and obstacle positions, camera, and other game variables
+    rabbitX = 0.0;
+    rabbitY = 0.0;
+    rabbitZ = 0.7;
+
+    obstacleX = 1.2;
+    obstacleY = -0.8;
+    obstacleZ = 0.7;
+
+    // Reset camera
+    cameraX = 0.0;
+    cameraY = 0.0;
+    cameraZ = 3.0;
+
+    // Reset other game variables
+    gameState = PLAYING;
+}
+
+
+void keyboardCallback(unsigned char key, int x, int y) {
+    switch (key) {
+        case 's':
+            happy = true;   // Set to smiling when 's' is pressed
+            break;
+        case 't':
+            happy = false;  // Set to sad when 't' is pressed
+            break;
+        case 'i':
+            // Start or stop bouncing when 'i' is pressed
+            bouncing = !bouncing;
+            break;
+            case 'R':
+        case 'r':
+           changeRabbitColor(1.0, 0.0, 0.0); // Red
+            break;
+        case 'G':
+    case 'g':
+        changeRabbitColor(0.0, 1.0, 0.0); // Green
+        break;
+    case 'B':
+    case 'b':
+        changeRabbitColor(0.0, 0.0, 1.0); // Blue
+        break;
+         // Camera controls
+        case 'U':
+        case 'u':
+            cameraZ += 0.1; // Move camera along positive Z
+            break;
+        case 'D':
+        case 'd':
+            cameraZ -= 0.1; // Move camera along negative Z
+            break;
+        case 'P':
+        case 'p':
+            cameraX += 0.1; // Move camera along positive X
+            break;
+        case 'N':
+        case 'n':
+            cameraX -= 0.1; // Move camera along negative X
+            break;
+        case 'X':
+        case 'x':
+            cameraY += 0.1; // Move camera along positive Y
+            break;
+        case 'L':
+        case 'l':
+            cameraY -= 0.1; // Move camera along negative Y
+            break;
+    }
+    updateCamera(); // Update camera after any key press
+    glutPostRedisplay();  // Request a redraw to reflect the changes
+}
+
+void specialKeys(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_LEFT:
+            rabbitX -= 0.1;  // Move the rabbit left
+            break;
+        case GLUT_KEY_RIGHT:
+            rabbitX += 0.1;  // Move the rabbit right
+            break;
+        case GLUT_KEY_UP:
+            rabbitY += 0.1;  // Move the rabbit up
+            break;
+        case GLUT_KEY_DOWN:
+            rabbitY -= 0.1;  // Move the rabbit down
+            break;
+        // You can handle other keys as needed
+    }
+    glutPostRedisplay();  // Request a redraw to reflect the changes
+}
+
+void idle() {
+    if (bouncing) {
+        // Bounce the rabbit using a sine function
+        rabbitY = 0.4 + 0.1 * sin(glutGet(GLUT_ELAPSED_TIME) / 100.0);
+    }
+    glutPostRedisplay();
+}
+void Reshape(int width, int height) {
+    if (height == 0) height = 1;
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-3.0, 3.0, -3.0, 3.0, 0.1, 100.0); // Adjust these values based on your scene's dimensions
+    glMatrixMode(GL_MODELVIEW);
+}
+void mouseCallback(int button, int state, int x, int y) {
+    // Handle mouse click events
+    if (gameState == GAME_OVER || gameState == YOU_WON) {
+        resetGame();
+        glutPostRedisplay();
+    }
+}
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Rabbit 3D");
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.6f, 0.6f, 1.0f, 1.0f);  // Light blue clear color
+
+    glutDisplayFunc(display);
+     glutReshapeFunc(Reshape);
+    glutKeyboardFunc(keyboardCallback);
+    // Register the mouse callback function
+    glutMouseFunc(mouseCallback);
+
+    glutSpecialFunc(specialKeys); // Register the specialKeys function
+       // Set up the idle function
+    glutIdleFunc(idle);
+
+
+    glutMainLoop();
+    return 0;
+}
